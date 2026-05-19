@@ -9,6 +9,8 @@ import {
 import styles from "./page.module.css";
 
 const navItems = ["about", "collections", "collaborations", "journal", "shop"];
+const heroMatrixImageUrl =
+  "https://tqdkpyuavxnhuvuinivh.supabase.co/storage/v1/object/public/aequalis_images/hero-matrix-20260519.png";
 
 const matrixSymbols = [
   { mark: "=", title: "Essential Equality" },
@@ -125,7 +127,7 @@ export default function AequalisLanding({
               aria-label="matrix symbol system"
             >
               <img
-                src="/images/aequalis/hero-matrix.png"
+                src={heroMatrixImageUrl}
                 alt="Essential Equality, Sacred Reduction, Grace Addition, Parallel Existence, Singular Origin"
                 width={608}
                 height={78}
