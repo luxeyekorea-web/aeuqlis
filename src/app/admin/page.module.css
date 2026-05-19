@@ -38,6 +38,14 @@
   line-height: 0.95;
 }
 
+.topbar nav span {
+  min-width: 142px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: right;
+}
+
 .topbar nav,
 .actions,
 .rowActions,

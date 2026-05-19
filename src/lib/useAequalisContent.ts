@@ -1,10 +1,12 @@
 "use client";
 
-import { useMemo, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useSyncExternalStore } from "react";
 import {
   getDefaultContent,
   getDefaultContentSnapshot,
   getStoredContentSnapshot,
+  normalizeAequalisContent,
+  writeStoredContent,
   type AequalisContent,
 } from "./aequalisContent";
 
@@ -25,18 +27,38 @@ export function useAequalisContent() {
     getDefaultContentSnapshot,
   );
 
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadServerContent() {
+      try {
+        const response = await fetch("/api/aequalis-content", {
+          cache: "no-store",
+        });
+
+        if (!response.ok || !isMounted) {
+          return;
+        }
+
+        const data = (await response.json()) as { content?: unknown };
+        writeStoredContent(normalizeAequalisContent(data.content));
+      } catch {
+        // Keep the local snapshot if the server is not reachable.
+      }
+    }
+
+    void loadServerContent();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return useMemo<AequalisContent>(() => {
     try {
       const parsed = JSON.parse(snapshot) as Partial<AequalisContent>;
 
-      return {
-        products: Array.isArray(parsed.products)
-          ? parsed.products
-          : getDefaultContent().products,
-        journals: Array.isArray(parsed.journals)
-          ? parsed.journals
-          : getDefaultContent().journals,
-      };
+      return normalizeAequalisContent(parsed);
     } catch {
       return getDefaultContent();
     }

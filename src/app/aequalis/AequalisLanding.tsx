@@ -3,9 +3,9 @@
 import Image from "next/image";
 import { useMemo } from "react";
 import {
+  type AequalisContent,
   sortByDisplayOrder,
 } from "@/lib/aequalisContent";
-import { useAequalisContent } from "@/lib/useAequalisContent";
 import styles from "./page.module.css";
 
 const navItems = ["about", "collections", "collaborations", "journal", "shop"];
@@ -27,9 +27,11 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function AequalisLanding() {
-  const content = useAequalisContent();
-
+export default function AequalisLanding({
+  content,
+}: {
+  content: AequalisContent;
+}) {
   const collaborations = useMemo(
     () =>
       sortByDisplayOrder(

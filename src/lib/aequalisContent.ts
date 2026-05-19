@@ -206,6 +206,55 @@ export function getStoredContentSnapshot() {
   );
 }
 
+function isProduct(value: unknown): value is Product {
+  const product = value as Partial<Product>;
+
+  return (
+    typeof product?.id === "string" &&
+    typeof product.title === "string" &&
+    (product.category === "collaboration" || product.category === "featured") &&
+    typeof product.subtitle === "string" &&
+    typeof product.description === "string" &&
+    typeof product.imageUrl === "string" &&
+    typeof product.linkUrl === "string" &&
+    typeof product.isActive === "boolean" &&
+    typeof product.sortOrder === "number" &&
+    typeof product.createdAt === "string" &&
+    typeof product.updatedAt === "string"
+  );
+}
+
+function isJournalPost(value: unknown): value is JournalPost {
+  const post = value as Partial<JournalPost>;
+
+  return (
+    typeof post?.id === "string" &&
+    typeof post.title === "string" &&
+    typeof post.summary === "string" &&
+    typeof post.body === "string" &&
+    typeof post.imageUrl === "string" &&
+    typeof post.linkUrl === "string" &&
+    typeof post.isActive === "boolean" &&
+    typeof post.sortOrder === "number" &&
+    typeof post.createdAt === "string" &&
+    typeof post.updatedAt === "string"
+  );
+}
+
+export function normalizeAequalisContent(value: unknown): AequalisContent {
+  const content = value as Partial<AequalisContent>;
+  const fallback = getDefaultContent();
+
+  return {
+    products: Array.isArray(content?.products)
+      ? content.products.filter(isProduct)
+      : fallback.products,
+    journals: Array.isArray(content?.journals)
+      ? content.journals.filter(isJournalPost)
+      : fallback.journals,
+  };
+}
+
 export function sortByDisplayOrder<T extends { sortOrder: number; createdAt: string }>(
   items: T[],
 ) {

@@ -1,5 +1,10 @@
 import AequalisLanding from "./AequalisLanding";
+import { getAequalisContentFromSupabase } from "@/lib/aequalisSupabase";
 
-export default function AequalisPage() {
-  return <AequalisLanding />;
+export const dynamic = "force-dynamic";
+
+export default async function AequalisPage() {
+  const content = await getAequalisContentFromSupabase();
+
+  return <AequalisLanding content={content} />;
 }

@@ -61,6 +61,9 @@ function toJournalDraft(post: JournalPost): JournalDraft {
 export default function AdminPage() {
   const content = useAequalisContent();
   const [mode, setMode] = useState<AdminMode>("products");
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">(
+    "idle",
+  );
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const [editingJournalId, setEditingJournalId] = useState<string | null>(null);
   const [productDraft, setProductDraft] =
@@ -91,6 +94,40 @@ export default function AdminPage() {
 
   function commit(nextContent: AequalisContent) {
     writeStoredContent(nextContent);
+    const storedToken = window.sessionStorage.getItem("aequalis-admin-token");
+    const adminToken =
+      storedToken ?? window.prompt("Enter the aequalis admin token");
+
+    if (!adminToken) {
+      setSaveStatus("error");
+      return;
+    }
+
+    window.sessionStorage.setItem("aequalis-admin-token", adminToken);
+    setSaveStatus("saving");
+
+    void fetch("/api/aequalis-content", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-aequalis-admin-token": adminToken,
+      },
+      body: JSON.stringify({ content: nextContent }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          if (response.status === 401) {
+            window.sessionStorage.removeItem("aequalis-admin-token");
+          }
+
+          throw new Error("Save failed");
+        }
+
+        setSaveStatus("saved");
+      })
+      .catch(() => {
+        setSaveStatus("error");
+      });
   }
 
   function resetAll() {
@@ -241,6 +278,15 @@ export default function AdminPage() {
           <h1>Content Control</h1>
         </div>
         <nav>
+          <span aria-live="polite">
+            {saveStatus === "saving"
+              ? "Saving..."
+              : saveStatus === "saved"
+                ? "Saved to Supabase"
+                : saveStatus === "error"
+                  ? "Supabase save failed"
+                  : ""}
+          </span>
           <a href="/aequalis">View landing</a>
           <button type="button" onClick={resetAll}>
             Reset demo data
