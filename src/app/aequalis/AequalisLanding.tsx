@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   type AequalisContent,
   sortByDisplayOrder,
@@ -38,6 +38,9 @@ export default function AequalisLanding({
 }: {
   content: AequalisContent;
 }) {
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const [isHeroSoundOn, setIsHeroSoundOn] = useState(false);
+
   const collaborations = useMemo(
     () =>
       sortByDisplayOrder(
@@ -62,6 +65,23 @@ export default function AequalisLanding({
     () => sortByDisplayOrder(content.journals.filter((post) => post.isActive)),
     [content.journals],
   );
+
+  function toggleHeroSound() {
+    const video = heroVideoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    const shouldTurnOn = video.muted;
+    video.muted = !shouldTurnOn;
+    video.volume = shouldTurnOn ? 1 : 0;
+    setIsHeroSoundOn(shouldTurnOn);
+
+    if (shouldTurnOn) {
+      void video.play();
+    }
+  }
 
   return (
     <main className={styles.page}>
@@ -115,15 +135,26 @@ export default function AequalisLanding({
           <div className={styles.heroVisual}>
             <div className={styles.heroMediaFrame}>
               <video
+                ref={heroVideoRef}
                 className={styles.heroVideo}
                 autoPlay
-                muted
+                muted={!isHeroSoundOn}
                 loop
                 playsInline
                 poster={heroPosterImageUrl}
               >
                 <source src={heroBannerVideoUrl} type="video/mp4" />
               </video>
+              <button
+                className={styles.heroSoundButton}
+                type="button"
+                aria-label={isHeroSoundOn ? "Mute hero video" : "Play hero video sound"}
+                aria-pressed={isHeroSoundOn}
+                onClick={toggleHeroSound}
+              >
+                <span aria-hidden="true" />
+                {isHeroSoundOn ? "on" : "off"}
+              </button>
             </div>
             <a
               className={styles.heroMatrixImage}

@@ -159,6 +159,7 @@
 }
 
 .heroMediaFrame {
+  position: relative;
   width: min(520px, 100%);
   aspect-ratio: 1;
   overflow: hidden;
@@ -174,6 +175,81 @@
   object-fit: cover;
   filter: contrast(0.94);
   animation: quietFloat 6s ease-in-out infinite;
+}
+
+.heroSoundButton {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 58px;
+  height: 30px;
+  padding: 0 11px;
+  border: 1px solid rgba(23, 21, 18, 0.36);
+  background: rgba(251, 250, 247, 0.72);
+  color: #171512;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+  transition:
+    background 220ms ease,
+    border-color 220ms ease,
+    transform 220ms ease;
+}
+
+.heroSoundButton:hover {
+  border-color: rgba(23, 21, 18, 0.72);
+  background: rgba(251, 250, 247, 0.94);
+  transform: translateY(-1px);
+}
+
+.heroSoundButton span {
+  position: relative;
+  width: 13px;
+  height: 13px;
+  border: 2px solid currentColor;
+  border-right: 0;
+  transform: skewY(-14deg);
+}
+
+.heroSoundButton span::before,
+.heroSoundButton span::after {
+  position: absolute;
+  content: "";
+}
+
+.heroSoundButton span::before {
+  top: 2px;
+  right: -7px;
+  width: 5px;
+  height: 5px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  opacity: 0;
+  transform: rotate(45deg);
+}
+
+.heroSoundButton span::after {
+  right: -9px;
+  bottom: -5px;
+  width: 13px;
+  height: 2px;
+  background: currentColor;
+  transform: rotate(-45deg);
+}
+
+.heroSoundButton[aria-pressed="true"] span::before {
+  opacity: 1;
+}
+
+.heroSoundButton[aria-pressed="true"] span::after {
+  display: none;
 }
 
 .heroMatrixImage {
