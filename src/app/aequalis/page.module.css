@@ -1,0 +1,698 @@
+.page {
+  --max: 1088px;
+  --side: clamp(24px, 5vw, 86px);
+  min-height: 100vh;
+  color: var(--foreground);
+  background:
+    linear-gradient(90deg, rgba(20, 18, 16, 0.025) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(20, 18, 16, 0.02) 1px, transparent 1px),
+    var(--background);
+  background-size: 38px 38px, 38px 38px, auto;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 96px;
+  padding: 0 var(--side);
+  border-bottom: 1px solid var(--line);
+  background: rgba(251, 250, 247, 0.92);
+  backdrop-filter: blur(16px);
+}
+
+.headerLogo {
+  width: 124px;
+  transition: opacity 260ms ease;
+}
+
+.headerLogo img {
+  width: 124px;
+  height: auto;
+}
+
+.headerLogo:hover {
+  opacity: 0.68;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(26px, 4vw, 54px);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.nav a {
+  position: relative;
+  padding: 10px 0;
+}
+
+.nav a::after {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 260ms ease;
+}
+
+.nav a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.hero {
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 70% 20%, rgba(255, 255, 255, 0.86), transparent 32%),
+    linear-gradient(120deg, rgba(232, 228, 219, 0.44), rgba(255, 255, 255, 0.16)),
+    var(--paper);
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.9fr) minmax(420px, 1.1fr);
+  gap: clamp(40px, 7vw, 104px);
+  max-width: 1128px;
+  min-height: 620px;
+  margin: 0 auto;
+  padding: 92px var(--side) 72px;
+  align-items: center;
+}
+
+.heroCopy {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: rise 700ms ease both;
+}
+
+.heroLogo {
+  width: min(298px, 78vw);
+  height: auto;
+  margin-bottom: 22px;
+}
+
+.heroCopy h1 {
+  margin-top: 8px;
+  font-family: var(--serif);
+  font-size: clamp(35px, 4.1vw, 48px);
+  font-weight: 600;
+  line-height: 0.98;
+}
+
+.koreanTitle {
+  margin-top: 16px;
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.statement {
+  margin-top: 24px;
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.12;
+}
+
+.heroLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: min(246px, 100%);
+  margin-top: auto;
+  padding-bottom: 8px;
+  border-bottom: 2px solid currentColor;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.heroLink span,
+.cardArrow,
+.journalCard b {
+  transition: transform 260ms ease;
+}
+
+.heroLink:hover span,
+.collabCard:hover .cardArrow,
+.journalCard:hover b {
+  transform: translateX(8px);
+}
+
+.heroVisual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  min-width: 0;
+}
+
+.heroMediaFrame {
+  width: min(520px, 100%);
+  aspect-ratio: 1;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(251, 250, 247, 0.18), rgba(251, 250, 247, 0.18)),
+    #f3f0e8;
+  mix-blend-mode: multiply;
+}
+
+.heroVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(0.94);
+  animation: quietFloat 6s ease-in-out infinite;
+}
+
+.heroMatrixImage {
+  display: block;
+  width: min(520px, 100%);
+  transition:
+    opacity 260ms ease,
+    transform 260ms ease;
+}
+
+.heroMatrixImage:hover {
+  opacity: 0.72;
+  transform: translateY(-2px);
+}
+
+.heroMatrixImage img {
+  width: 100%;
+  height: auto;
+}
+
+.symbolTile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+  border-right: 1px solid rgba(34, 31, 27, 0.28);
+  font-size: clamp(25px, 3vw, 34px);
+  transition:
+    background 260ms ease,
+    color 260ms ease;
+}
+
+.symbolTile:last-child {
+  border-right: 0;
+}
+
+.symbolTile:hover {
+  color: #fbfaf7;
+  background: #171512;
+}
+
+.symbolTile span {
+  font-weight: 400;
+}
+
+.symbolTile strong {
+  min-width: 34px;
+  text-align: center;
+  font-family: var(--sans);
+  font-weight: 700;
+}
+
+.about,
+.contentBand,
+.symbolSystem,
+.journal,
+.footer {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 46px var(--side);
+  border-bottom: 1px solid var(--line);
+}
+
+.sectionLabel {
+  color: #25221e;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.08;
+}
+
+.sectionLabel i,
+.aboutBody i,
+.footerBrand i,
+.journalCard i {
+  display: block;
+  width: 25px;
+  height: 1px;
+  margin-top: 20px;
+  background: currentColor;
+}
+
+.about {
+  position: relative;
+  min-height: 270px;
+  align-items: start;
+}
+
+.aboutBody h2 {
+  max-width: 700px;
+  font-family: var(--serif);
+  font-size: clamp(27px, 3vw, 36px);
+  font-weight: 600;
+  line-height: 1.06;
+}
+
+.aboutBody p {
+  margin-top: 26px;
+  font-size: clamp(17px, 2vw, 22px);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.aboutBird {
+  position: absolute;
+  right: var(--side);
+  top: 76px;
+  width: 116px;
+  height: auto;
+  opacity: 0.36;
+}
+
+.cardGrid,
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+}
+
+.emptyState {
+  padding: 28px 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.collabCard {
+  display: flex;
+  min-height: 344px;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.38);
+  transition:
+    border-color 260ms ease,
+    transform 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.collabCard:hover {
+  border-color: rgba(23, 21, 18, 0.74);
+  box-shadow: 0 18px 42px rgba(45, 40, 32, 0.08);
+  transform: translateY(-3px);
+}
+
+.imageFrame,
+.productImage {
+  overflow: hidden;
+  background: #eceae5;
+}
+
+.imageFrame img,
+.productImage img,
+.journalCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition:
+    filter 360ms ease,
+    transform 520ms ease;
+}
+
+.collabCard:hover img,
+.productCard:hover img,
+.journalCard:hover img {
+  filter: contrast(1.04);
+  transform: scale(1.025);
+}
+
+.imageFrame {
+  aspect-ratio: 235 / 225;
+}
+
+.cardText {
+  position: relative;
+  min-height: 118px;
+  padding: 21px 18px 18px;
+}
+
+.cardText h3,
+.productCard h3 {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.24;
+}
+
+.cardText p,
+.productCard p {
+  margin-top: 12px;
+  color: #27231e;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.cardText p span {
+  display: block;
+}
+
+.cardArrow {
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  font-size: 20px;
+}
+
+.symbolSystem {
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.symbolGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: 1px solid rgba(34, 31, 27, 0.38);
+}
+
+.symbolTile {
+  min-height: 126px;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.symbolTile div {
+  font-size: clamp(32px, 4vw, 50px);
+  line-height: 0.8;
+}
+
+.symbolTile p {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.productCard {
+  display: block;
+  transition: opacity 260ms ease;
+}
+
+.productCard:hover {
+  opacity: 0.78;
+}
+
+.productImage {
+  aspect-ratio: 235 / 192;
+  margin-bottom: 18px;
+}
+
+.journalGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(300px, 1fr));
+  gap: clamp(28px, 5vw, 70px);
+}
+
+.journalCard {
+  display: grid;
+  grid-template-columns: minmax(160px, 0.9fr) minmax(180px, 1fr);
+  min-height: 172px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.34);
+  transition:
+    border-color 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.journalCard:hover {
+  border-color: rgba(23, 21, 18, 0.74);
+  box-shadow: 0 18px 36px rgba(45, 40, 32, 0.07);
+}
+
+.journalCard > div {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 25px 20px;
+}
+
+.journalCard h3 {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 600;
+}
+
+.journalCard p {
+  margin-top: 15px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.journalCard span {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.footer {
+  position: relative;
+  grid-template-columns: 240px 1fr 92px;
+  gap: 48px;
+  padding-top: 44px;
+  padding-bottom: 0;
+}
+
+.footerBrand {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.22;
+}
+
+.footerBrand img {
+  width: 134px;
+  height: auto;
+  margin-bottom: 14px;
+}
+
+.footerBrand p + p {
+  margin-top: 18px;
+}
+
+.footerColumns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-left: 1px solid var(--line);
+}
+
+.footerColumns nav {
+  display: flex;
+  min-height: 206px;
+  flex-direction: column;
+  gap: 15px;
+  padding-left: clamp(34px, 5vw, 58px);
+  border-right: 1px solid var(--line);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.footerColumns a,
+.footerColumns span {
+  width: fit-content;
+}
+
+.footerColumns a:hover,
+.legal a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.footerColumns span {
+  margin-top: 10px;
+}
+
+.footerBird {
+  align-self: start;
+  width: 86px;
+  height: auto;
+  opacity: 0.75;
+}
+
+.legal {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: clamp(40px, 10vw, 156px);
+  width: calc(100% + (var(--side) * 2));
+  margin: 34px calc(var(--side) * -1) 0;
+  padding: 23px var(--side);
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes quietFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@media (max-width: 980px) {
+  .header {
+    height: auto;
+    min-height: 82px;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding-top: 18px;
+    padding-bottom: 16px;
+  }
+
+  .nav {
+    width: 100%;
+    justify-content: space-between;
+    gap: 14px;
+    overflow-x: auto;
+    font-size: 12px;
+  }
+
+  .heroInner {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding-top: 58px;
+  }
+
+  .heroCopy {
+    max-width: 520px;
+  }
+
+  .heroLink {
+    margin-top: 36px;
+  }
+
+  .heroVisual {
+    gap: 34px;
+  }
+
+  .about,
+  .contentBand,
+  .symbolSystem,
+  .journal {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .aboutBird {
+    right: var(--side);
+    top: auto;
+    bottom: 32px;
+  }
+
+  .symbolGrid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .symbolTile {
+    border-bottom: 1px solid rgba(34, 31, 27, 0.28);
+  }
+
+  .journalGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer {
+    grid-template-columns: 1fr;
+  }
+
+  .footerColumns {
+    border-left: 0;
+  }
+
+  .footerColumns nav {
+    padding-left: 28px;
+  }
+
+  .footerBird {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    --side: 20px;
+  }
+
+  .headerLogo {
+    width: 112px;
+  }
+
+  .aboutBody h2 br,
+  .aboutBody p br {
+    display: none;
+  }
+
+  .cardGrid,
+  .productGrid {
+    grid-template-columns: repeat(auto-fit, minmax(156px, 1fr));
+    gap: 18px;
+  }
+
+  .collabCard {
+    min-height: 302px;
+  }
+
+  .journalCard {
+    grid-template-columns: 1fr;
+  }
+
+  .journalCard img {
+    aspect-ratio: 16 / 9;
+  }
+
+  .footerColumns {
+    grid-template-columns: 1fr;
+  }
+
+  .footerColumns nav {
+    min-height: 0;
+    padding: 24px 0;
+    border-right: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .legal {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}
