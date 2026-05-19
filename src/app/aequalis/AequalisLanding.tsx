@@ -152,8 +152,26 @@ export default function AequalisLanding({
                 aria-pressed={isHeroSoundOn}
                 onClick={toggleHeroSound}
               >
-                <span aria-hidden="true" />
-                {isHeroSoundOn ? "on" : "off"}
+                {isHeroSoundOn ? (
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    focusable="false"
+                  >
+                    <path d="M4 9v6h4l5 4V5L8 9H4Z" />
+                    <path d="M16 8.5a5 5 0 0 1 0 7" />
+                    <path d="M18.5 6a8.5 8.5 0 0 1 0 12" />
+                  </svg>
+                ) : (
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 24 24"
+                    focusable="false"
+                  >
+                    <path d="M4 9v6h4l5 4V5L8 9H4Z" />
+                    <path d="m17 9 4 4m0-4-4 4" />
+                  </svg>
+                )}
               </button>
             </div>
             <a
