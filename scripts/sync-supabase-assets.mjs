@@ -17,8 +17,8 @@ const defaultJournals = [
   {
     id: "journal-parallel-values",
     title: "on parallel values",
-    summary: "?곕━???꾨룄 ?꾨옒???꾨땶, ?섎???議댁옱?섍린瑜??좏깮?덈떎.",
-    body: "?곕━???꾨룄 ?꾨옒???꾨땶, ?섎???議댁옱?섍린瑜??좏깮?덈떎.",
+    summary: "우리는 위도 아래도 아닌, 나란히 존재하기를 선택했다.",
+    body: "우리는 위도 아래도 아닌, 나란히 존재하기를 선택했다.",
     imageUrl: "/images/aequalis/journal-values.png",
     linkUrl: "#journal",
     isActive: true,
@@ -29,8 +29,8 @@ const defaultJournals = [
   {
     id: "journal-designing-artisans",
     title: "designing with artisans",
-    summary: "蹂댁씠??寃??덈㉧??媛移? ?μ씤怨쇱쓽 ?묒뾽?쇰줈 ?꾩꽦?쒕떎.",
-    body: "蹂댁씠??寃??덈㉧??媛移? ?μ씤怨쇱쓽 ?묒뾽?쇰줈 ?꾩꽦?쒕떎.",
+    summary: "보이는 것 너머의 가치, 장인과의 협업으로 완성된다.",
+    body: "보이는 것 너머의 가치, 장인과의 협업으로 완성된다.",
     imageUrl: "/images/aequalis/journal-artisans.png",
     linkUrl: "#journal",
     isActive: true,
