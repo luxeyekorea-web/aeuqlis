@@ -11,6 +11,34 @@ const bucketName = "aequalis_images";
 const tableName = "aequalis_landing_content";
 const contentId = "aequalis";
 const imageDirectory = path.join(projectRoot, "public", "images", "aequalis");
+const now = "2026-05-19T00:00:00.000Z";
+
+const defaultJournals = [
+  {
+    id: "journal-parallel-values",
+    title: "on parallel values",
+    summary: "?곕━???꾨룄 ?꾨옒???꾨땶, ?섎???議댁옱?섍린瑜??좏깮?덈떎.",
+    body: "?곕━???꾨룄 ?꾨옒???꾨땶, ?섎???議댁옱?섍린瑜??좏깮?덈떎.",
+    imageUrl: "/images/aequalis/journal-values.png",
+    linkUrl: "#journal",
+    isActive: true,
+    sortOrder: 10,
+    createdAt: now,
+    updatedAt: now,
+  },
+  {
+    id: "journal-designing-artisans",
+    title: "designing with artisans",
+    summary: "蹂댁씠??寃??덈㉧??媛移? ?μ씤怨쇱쓽 ?묒뾽?쇰줈 ?꾩꽦?쒕떎.",
+    body: "蹂댁씠??寃??덈㉧??媛移? ?μ씤怨쇱쓽 ?묒뾽?쇰줈 ?꾩꽦?쒕떎.",
+    imageUrl: "/images/aequalis/journal-artisans.png",
+    linkUrl: "#journal",
+    isActive: true,
+    sortOrder: 20,
+    createdAt: now,
+    updatedAt: now,
+  },
+];
 
 function parseEnv(raw) {
   return Object.fromEntries(
@@ -50,6 +78,11 @@ function rewriteImageUrls(content, supabase, imageFiles) {
     ]),
   );
 
+  const journals =
+    Array.isArray(content.journals) && content.journals.length > 0
+      ? content.journals
+      : defaultJournals;
+
   return {
     products: Array.isArray(content.products)
       ? content.products.map((product) => ({
@@ -57,12 +90,10 @@ function rewriteImageUrls(content, supabase, imageFiles) {
           imageUrl: byLocalPath[product.imageUrl] ?? product.imageUrl,
         }))
       : [],
-    journals: Array.isArray(content.journals)
-      ? content.journals.map((post) => ({
+    journals: journals.map((post) => ({
           ...post,
           imageUrl: byLocalPath[post.imageUrl] ?? post.imageUrl,
-        }))
-      : [],
+        })),
   };
 }
 
