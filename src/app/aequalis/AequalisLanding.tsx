@@ -9,8 +9,12 @@ import {
 import styles from "./page.module.css";
 
 const navItems = ["about", "collections", "collaborations", "journal", "shop"];
+const heroBannerVideoUrl =
+  "https://tqdkpyuavxnhuvuinivh.supabase.co/storage/v1/object/public/aequalis_images/hero-banner-20260519.mp4";
 const heroMatrixImageUrl =
   "https://tqdkpyuavxnhuvuinivh.supabase.co/storage/v1/object/public/aequalis_images/hero-matrix-20260519.png";
+const heroPosterImageUrl =
+  "https://tqdkpyuavxnhuvuinivh.supabase.co/storage/v1/object/public/aequalis_images/hero-symbol.png";
 
 const matrixSymbols = [
   { mark: "=", title: "Essential Equality" },
@@ -116,9 +120,9 @@ export default function AequalisLanding({
                 muted
                 loop
                 playsInline
-                poster="/images/aequalis/hero-symbol.png"
+                poster={heroPosterImageUrl}
               >
-                <source src="/videos/aequalis/hero-banner.mp4" type="video/mp4" />
+                <source src={heroBannerVideoUrl} type="video/mp4" />
               </video>
             </div>
             <a
