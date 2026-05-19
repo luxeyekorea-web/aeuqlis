@@ -10,7 +10,6 @@ const envPath = path.join(projectRoot, ".env.local");
 const bucketName = "aequalis_images";
 const tableName = "aequalis_landing_content";
 const contentId = "aequalis";
-
 const imageDirectory = path.join(projectRoot, "public", "images", "aequalis");
 
 function parseEnv(raw) {
@@ -43,7 +42,7 @@ function getPublicUrl(supabase, fileName) {
   return data.publicUrl;
 }
 
-function rewriteImageUrls(content, supabase) {
+function rewriteImageUrls(content, supabase, imageFiles) {
   const byLocalPath = Object.fromEntries(
     imageFiles.map((fileName) => [
       `/images/aequalis/${fileName}`,
@@ -107,7 +106,7 @@ if (readError) {
   throw new Error(`Failed to read landing content: ${readError.message}`);
 }
 
-const content = rewriteImageUrls(data.content, supabase);
+const content = rewriteImageUrls(data.content, supabase, imageFiles);
 
 const { error: writeError } = await supabase
   .from(tableName)
