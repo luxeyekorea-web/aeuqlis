@@ -11,8 +11,7 @@ import styles from "./page.module.css";
 const navItems = ["about", "collections", "collaborations", "journal", "shop"];
 const heroBannerVideoUrl =
   "https://tqdkpyuavxnhuvuinivh.supabase.co/storage/v1/object/public/aequalis_images/hero-banner-20260519.mp4";
-const heroMatrixImageUrl =
-  "https://tqdkpyuavxnhuvuinivh.supabase.co/storage/v1/object/public/aequalis_images/hero-matrix-20260519.png";
+const heroMatrixImageUrl = "/images/aequalis/hero-matrix.png";
 const heroPosterImageUrl =
   "https://tqdkpyuavxnhuvuinivh.supabase.co/storage/v1/object/public/aequalis_images/hero-symbol.png";
 
@@ -126,10 +125,14 @@ export default function AequalisLanding({
               <br />
               we exist in parallel.
             </p>
-            <a className={styles.heroLink} href="#collaborations">
-              explore collaborations
-              <span aria-hidden="true">-&gt;</span>
-            </a>
+            <div className={styles.heroMatrixImage}>
+              <img
+                src={heroMatrixImageUrl}
+                alt="Essential Equality, Sacred Reduction, Grace Addition, Parallel Existence, Singular Origin"
+                width={608}
+                height={78}
+              />
+            </div>
           </div>
 
           <div className={styles.heroVisual}>
@@ -174,18 +177,6 @@ export default function AequalisLanding({
                 )}
               </button>
             </div>
-            <a
-              className={styles.heroMatrixImage}
-              href="#symbols"
-              aria-label="matrix symbol system"
-            >
-              <img
-                src={heroMatrixImageUrl}
-                alt="Essential Equality, Sacred Reduction, Grace Addition, Parallel Existence, Singular Origin"
-                width={608}
-                height={78}
-              />
-            </a>
           </div>
         </div>
       </section>
