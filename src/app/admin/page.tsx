@@ -16,8 +16,33 @@ import {
 import { useAequalisContent } from "@/lib/useAequalisContent";
 import styles from "./page.module.css";
 
-type AdminMode = "products" | "journal";
+type AdminMode = "products" | "journal" | "inquiries";
 type UploadTarget = "product" | "journal";
+type InquiryStatus = "new" | "reviewing" | "replied" | "archived";
+type AdminInquiry = {
+  id: string;
+  name: string;
+  company: string | null;
+  email: string;
+  phone: string | null;
+  collaborationType: string;
+  message: string;
+  referenceUrl: string | null;
+  status: InquiryStatus;
+  adminNote: string | null;
+  sourcePath: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+const inquiryTypeLabels: Record<string, string> = {
+  "brand-collaboration": "브랜드 협업",
+  "artisan-series": "장인 시리즈",
+  "retail-exclusive": "리테일 익스클루시브",
+  "press-editorial": "프레스 / 에디토리얼",
+  partnership: "파트너십 제안",
+  other: "기타 문의",
+};
 
 type ProductDraft = Omit<Product, "id" | "createdAt" | "updatedAt">;
 type JournalDraft = Omit<JournalPost, "id" | "createdAt" | "updatedAt">;
@@ -79,6 +104,11 @@ export default function AdminPage() {
     useState<ProductDraft>(emptyProductDraft);
   const [journalDraft, setJournalDraft] =
     useState<JournalDraft>(emptyJournalDraft);
+  const [inquiries, setInquiries] = useState<AdminInquiry[]>([]);
+  const [inquiryStatus, setInquiryStatus] = useState<
+    "idle" | "loading" | "loaded" | "saving" | "error"
+  >("idle");
+  const [inquiryNotes, setInquiryNotes] = useState<Record<string, string>>({});
 
   const products = useMemo(
     () => sortByDisplayOrder(content.products),
@@ -113,6 +143,97 @@ export default function AdminPage() {
     window.sessionStorage.setItem("aequalis-admin-token", adminToken);
 
     return adminToken;
+  }
+
+  async function loadInquiries() {
+    const adminToken = getAdminToken();
+
+    if (!adminToken) {
+      setInquiryStatus("error");
+      return;
+    }
+
+    setInquiryStatus("loading");
+
+    try {
+      const response = await fetch("/api/aequalis-inquiries", {
+        headers: {
+          "x-aequalis-admin-token": adminToken,
+        },
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.sessionStorage.removeItem("aequalis-admin-token");
+        }
+
+        throw new Error("Unable to load inquiries");
+      }
+
+      const data = (await response.json()) as { inquiries?: AdminInquiry[] };
+      const loadedInquiries = data.inquiries ?? [];
+
+      setInquiries(loadedInquiries);
+      setInquiryNotes(
+        Object.fromEntries(
+          loadedInquiries.map((inquiry) => [inquiry.id, inquiry.adminNote ?? ""]),
+        ),
+      );
+      setInquiryStatus("loaded");
+    } catch {
+      setInquiryStatus("error");
+    }
+  }
+
+  async function updateInquiry(
+    id: string,
+    fields: { status?: InquiryStatus; adminNote?: string },
+  ) {
+    const adminToken = getAdminToken();
+
+    if (!adminToken) {
+      setInquiryStatus("error");
+      return;
+    }
+
+    setInquiryStatus("saving");
+
+    try {
+      const response = await fetch(`/api/aequalis-inquiries/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "x-aequalis-admin-token": adminToken,
+        },
+        body: JSON.stringify(fields),
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.sessionStorage.removeItem("aequalis-admin-token");
+        }
+
+        throw new Error("Unable to update inquiry");
+      }
+
+      const data = (await response.json()) as { inquiry?: AdminInquiry };
+
+      const updatedInquiry = data.inquiry;
+
+      if (updatedInquiry) {
+        setInquiries((items) =>
+          items.map((item) => (item.id === id ? updatedInquiry : item)),
+        );
+        setInquiryNotes((notes) => ({
+          ...notes,
+          [id]: updatedInquiry.adminNote ?? "",
+        }));
+      }
+
+      setInquiryStatus("loaded");
+    } catch {
+      setInquiryStatus("error");
+    }
   }
 
   function commit(nextContent: AequalisContent) {
@@ -364,6 +485,12 @@ export default function AdminPage() {
                       ? "Image uploaded"
                       : uploadStatus === "error"
                         ? "Image upload failed"
+                        : inquiryStatus === "loading"
+                          ? "Loading inquiries..."
+                          : inquiryStatus === "saving"
+                            ? "Saving inquiry..."
+                            : inquiryStatus === "error"
+                              ? "Inquiry action failed"
                         : ""}
           </span>
           <a href="/aequalis">View landing</a>
@@ -386,6 +513,10 @@ export default function AdminPage() {
           <span>active journal</span>
           <strong>{content.journals.filter((item) => item.isActive).length}</strong>
         </div>
+        <div>
+          <span>new inquiries</span>
+          <strong>{inquiries.filter((item) => item.status === "new").length}</strong>
+        </div>
       </section>
 
       <div className={styles.tabs} role="tablist" aria-label="Admin sections">
@@ -402,6 +533,19 @@ export default function AdminPage() {
           onClick={() => setMode("journal")}
         >
           Journal
+        </button>
+        <button
+          type="button"
+          className={mode === "inquiries" ? styles.activeTab : ""}
+          onClick={() => {
+            setMode("inquiries");
+
+            if (inquiryStatus === "idle") {
+              void loadInquiries();
+            }
+          }}
+        >
+          Inquiries
         </button>
       </div>
 
@@ -612,7 +756,7 @@ export default function AdminPage() {
             </div>
           </div>
         </section>
-      ) : (
+      ) : mode === "journal" ? (
         <section className={styles.workspace}>
           <form
             className={styles.editor}
@@ -790,6 +934,117 @@ export default function AdminPage() {
                   </div>
                 </article>
               ))}
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className={styles.inquiryWorkspace}>
+          <div className={styles.listPanel}>
+            <div className={styles.listHeading}>
+              <span>Partnership inquiries</span>
+              <strong>{inquiries.length}</strong>
+            </div>
+            <div className={styles.inquiryToolbar}>
+              <p>
+                상세페이지 문의 폼으로 접수된 요청입니다. 상태와 내부 메모만
+                관리자에서 관리합니다.
+              </p>
+              <button type="button" onClick={() => void loadInquiries()}>
+                Refresh
+              </button>
+            </div>
+            <div className={styles.inquiryList}>
+              {inquiries.length ? (
+                inquiries.map((inquiry) => (
+                  <article className={styles.inquiryRow} key={inquiry.id}>
+                    <div className={styles.inquiryMeta}>
+                      <span className={styles.kicker}>
+                        {new Date(inquiry.createdAt).toLocaleString("ko-KR")} /{" "}
+                        {inquiryTypeLabels[inquiry.collaborationType] ??
+                          inquiry.collaborationType}
+                      </span>
+                      <h2>
+                        {inquiry.name}
+                        {inquiry.company ? ` / ${inquiry.company}` : ""}
+                      </h2>
+                      <p>{inquiry.message}</p>
+                      <dl>
+                        <div>
+                          <dt>Email</dt>
+                          <dd>
+                            <a href={`mailto:${inquiry.email}`}>{inquiry.email}</a>
+                          </dd>
+                        </div>
+                        {inquiry.phone ? (
+                          <div>
+                            <dt>Phone</dt>
+                            <dd>{inquiry.phone}</dd>
+                          </div>
+                        ) : null}
+                        {inquiry.referenceUrl ? (
+                          <div>
+                            <dt>Reference</dt>
+                            <dd>{inquiry.referenceUrl}</dd>
+                          </div>
+                        ) : null}
+                        {inquiry.sourcePath ? (
+                          <div>
+                            <dt>Source</dt>
+                            <dd>{inquiry.sourcePath}</dd>
+                          </div>
+                        ) : null}
+                      </dl>
+                    </div>
+                    <div className={styles.inquiryControls}>
+                      <label>
+                        Status
+                        <select
+                          value={inquiry.status}
+                          onChange={(event) =>
+                            void updateInquiry(inquiry.id, {
+                              status: event.target.value as InquiryStatus,
+                            })
+                          }
+                        >
+                          <option value="new">new</option>
+                          <option value="reviewing">reviewing</option>
+                          <option value="replied">replied</option>
+                          <option value="archived">archived</option>
+                        </select>
+                      </label>
+                      <label>
+                        Admin note
+                        <textarea
+                          rows={5}
+                          value={inquiryNotes[inquiry.id] ?? ""}
+                          onChange={(event) =>
+                            setInquiryNotes({
+                              ...inquiryNotes,
+                              [inquiry.id]: event.target.value,
+                            })
+                          }
+                        />
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          void updateInquiry(inquiry.id, {
+                            adminNote: inquiryNotes[inquiry.id] ?? "",
+                          })
+                        }
+                      >
+                        Save note
+                      </button>
+                    </div>
+                  </article>
+                ))
+              ) : (
+                <p className={styles.emptyState}>
+                  {inquiryStatus === "loading"
+                    ? "Loading inquiries..."
+                    : "No inquiries yet."}
+                </p>
+              )}
             </div>
           </div>
         </section>

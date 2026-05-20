@@ -14,6 +14,9 @@ const heroBannerVideoUrl =
 const heroMatrixImageUrl = "/images/aequalis/hero-matrix.png";
 const heroPosterImageUrl =
   "https://tqdkpyuavxnhuvuinivh.supabase.co/storage/v1/object/public/aequalis_images/hero-symbol.png";
+const collaborationDetailLinks: Record<string, string> = {
+  "product-collab-seone": "/aequalis/collaborations/seone",
+};
 
 const matrixSymbols = [
   { mark: "=", title: "Essential Equality" },
@@ -214,7 +217,11 @@ export default function AequalisLanding({
         <div className={styles.cardGrid}>
           {collaborations.length > 0 ? (
             collaborations.map((item) => (
-              <a className={styles.collabCard} href={item.linkUrl} key={item.id}>
+              <a
+                className={styles.collabCard}
+                href={collaborationDetailLinks[item.id] ?? item.linkUrl}
+                key={item.id}
+              >
                 <div className={styles.imageFrame}>
                   <Image src={item.imageUrl} alt="" width={235} height={225} />
                 </div>

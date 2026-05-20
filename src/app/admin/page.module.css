@@ -88,7 +88,7 @@
 
 .summary {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1px;
   margin: 28px 0 22px;
   border: 1px solid var(--line);
@@ -129,6 +129,10 @@
   grid-template-columns: minmax(320px, 430px) minmax(0, 1fr);
   gap: 24px;
   align-items: start;
+}
+
+.inquiryWorkspace {
+  display: block;
 }
 
 .editor,
@@ -336,6 +340,136 @@
   font-size: 12px;
 }
 
+.inquiryToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.inquiryToolbar p {
+  max-width: 620px;
+  color: #3c3832;
+  font-size: 14px;
+  line-height: 1.55;
+  word-break: keep-all;
+}
+
+.inquiryToolbar button,
+.inquiryControls button {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid #171512;
+  background: #171512;
+  color: #fbfaf7;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.inquiryToolbar button:hover,
+.inquiryControls button:hover {
+  background: transparent;
+  color: #171512;
+}
+
+.inquiryList {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.inquiryRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: 22px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  background: rgba(251, 250, 247, 0.62);
+}
+
+.inquiryMeta h2 {
+  margin-top: 8px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.inquiryMeta p {
+  max-width: 760px;
+  margin-top: 14px;
+  color: #2e2a25;
+  font-size: 15px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+.inquiryMeta dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 18px;
+  margin-top: 18px;
+}
+
+.inquiryMeta dt {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.inquiryMeta dd {
+  margin-top: 5px;
+  color: #26221e;
+  font-size: 14px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.inquiryControls {
+  display: grid;
+  gap: 13px;
+  align-content: start;
+}
+
+.inquiryControls label {
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.inquiryControls select,
+.inquiryControls textarea {
+  width: 100%;
+  border: 1px solid #c9c2b6;
+  background: rgba(251, 250, 247, 0.84);
+  color: #171512;
+  font-size: 14px;
+  outline: none;
+}
+
+.inquiryControls select {
+  height: 40px;
+  padding: 0 10px;
+}
+
+.inquiryControls textarea {
+  resize: vertical;
+  padding: 11px;
+  line-height: 1.55;
+}
+
+.emptyState {
+  padding: 24px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
 .dangerButton {
   border-color: #9e2f2f !important;
   background: transparent !important;
@@ -390,5 +524,19 @@
   .rowActions {
     grid-column: 1 / -1;
     justify-content: flex-start;
+  }
+
+  .inquiryToolbar,
+  .inquiryRow {
+    grid-template-columns: 1fr;
+  }
+
+  .inquiryToolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .inquiryMeta dl {
+    grid-template-columns: 1fr;
   }
 }
