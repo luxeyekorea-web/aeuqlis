@@ -22,12 +22,17 @@ type UploadTarget = "product" | "journal";
 type ProductDraft = Omit<Product, "id" | "createdAt" | "updatedAt">;
 type JournalDraft = Omit<JournalPost, "id" | "createdAt" | "updatedAt">;
 
+const defaultProductImageUrl =
+  "https://tqdkpyuavxnhuvuinivh.supabase.co/storage/v1/object/public/aequalis_images/collab-seone.png";
+const defaultJournalImageUrl =
+  "https://tqdkpyuavxnhuvuinivh.supabase.co/storage/v1/object/public/aequalis_images/journal-values.png";
+
 const emptyProductDraft: ProductDraft = {
   title: "",
   category: "collaboration",
   subtitle: "",
   description: "",
-  imageUrl: "/images/aequalis/collab-seone.png",
+  imageUrl: defaultProductImageUrl,
   linkUrl: "#shop",
   isActive: true,
   sortOrder: 50,
@@ -37,7 +42,7 @@ const emptyJournalDraft: JournalDraft = {
   title: "",
   summary: "",
   body: "",
-  imageUrl: "/images/aequalis/journal-values.png",
+  imageUrl: defaultJournalImageUrl,
   linkUrl: "#journal",
   isActive: true,
   sortOrder: 50,
@@ -487,20 +492,6 @@ export default function AdminPage() {
               />
             </label>
 
-            <label>
-              Image path
-              <input
-                value={productDraft.imageUrl}
-                onChange={(event) =>
-                  setProductDraft({
-                    ...productDraft,
-                    imageUrl: event.target.value,
-                  })
-                }
-                placeholder="/images/aequalis/featured-bag.png"
-              />
-            </label>
-
             <div className={styles.imageTools}>
               <div className={styles.preview}>
                 {productDraft.imageUrl ? (
@@ -514,7 +505,7 @@ export default function AdminPage() {
                 ) : null}
               </div>
               <label className={styles.uploadButton}>
-                Upload image
+                Replace image
                 <input
                   type="file"
                   accept="image/*"
@@ -525,6 +516,9 @@ export default function AdminPage() {
                 />
               </label>
             </div>
+            <p className={styles.storageNote}>
+              Images are stored in Supabase Storage.
+            </p>
 
             <label>
               Link URL
@@ -700,20 +694,6 @@ export default function AdminPage() {
               />
             </label>
 
-            <label>
-              Image path
-              <input
-                value={journalDraft.imageUrl}
-                onChange={(event) =>
-                  setJournalDraft({
-                    ...journalDraft,
-                    imageUrl: event.target.value,
-                  })
-                }
-                placeholder="/images/aequalis/journal-values.png"
-              />
-            </label>
-
             <div className={styles.imageTools}>
               <div className={styles.preview}>
                 {journalDraft.imageUrl ? (
@@ -727,7 +707,7 @@ export default function AdminPage() {
                 ) : null}
               </div>
               <label className={styles.uploadButton}>
-                Upload image
+                Replace image
                 <input
                   type="file"
                   accept="image/*"
@@ -738,6 +718,9 @@ export default function AdminPage() {
                 />
               </label>
             </div>
+            <p className={styles.storageNote}>
+              Images are stored in Supabase Storage.
+            </p>
 
             <label className={styles.checkRow}>
               <input

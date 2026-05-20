@@ -254,6 +254,13 @@
   object-fit: cover;
 }
 
+.storageNote {
+  margin-top: -7px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .checkRow {
   display: flex !important;
   grid-template-columns: auto 1fr;
