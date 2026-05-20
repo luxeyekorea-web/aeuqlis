@@ -131,12 +131,12 @@
   line-height: 1.14;
 }
 
-.cardArrow,
+.cardAction span,
 .journalCard b {
   transition: transform 260ms ease;
 }
 
-.collabCard:hover .cardArrow,
+.collabCard:hover .cardAction span,
 .journalCard:hover b {
   transform: translateX(8px);
 }
@@ -297,10 +297,14 @@
   align-items: start;
 }
 
+.aboutBody {
+  padding-right: 150px;
+}
+
 .aboutBody h2 {
-  max-width: 700px;
+  max-width: 930px;
   font-family: var(--serif);
-  font-size: clamp(27px, 3vw, 36px);
+  font-size: clamp(27px, 3.1vw, 38px);
   font-weight: 600;
   line-height: 1.06;
 }
@@ -315,7 +319,7 @@
 .aboutBird {
   position: absolute;
   right: var(--side);
-  top: 76px;
+  top: 210px;
   width: 116px;
   height: auto;
   opacity: 0.36;
@@ -336,7 +340,6 @@
 
 .collabCard {
   display: flex;
-  min-height: 344px;
   flex-direction: column;
   border: 1px solid var(--line);
   background: rgba(255, 255, 255, 0.38);
@@ -352,14 +355,12 @@
   transform: translateY(-3px);
 }
 
-.imageFrame,
-.productImage {
+.imageFrame {
   overflow: hidden;
   background: #eceae5;
 }
 
 .imageFrame img,
-.productImage img,
 .journalCard img {
   width: 100%;
   height: 100%;
@@ -370,7 +371,6 @@
 }
 
 .collabCard:hover img,
-.productCard:hover img,
 .journalCard:hover img {
   filter: contrast(1.04);
   transform: scale(1.025);
@@ -381,20 +381,21 @@
 }
 
 .cardText {
-  position: relative;
-  min-height: 118px;
-  padding: 21px 18px 18px;
+  display: flex;
+  min-height: 150px;
+  flex: 1;
+  flex-direction: column;
+  padding: 22px 20px 20px;
 }
 
-.cardText h3,
-.productCard h3 {
+.cardText h3 {
+  min-height: 2.48em;
   font-size: 15px;
   font-weight: 700;
   line-height: 1.24;
 }
 
-.cardText p,
-.productCard p {
+.cardText p {
   margin-top: 12px;
   color: #27231e;
   font-size: 12px;
@@ -406,11 +407,24 @@
   display: block;
 }
 
-.cardArrow {
-  position: absolute;
-  right: 18px;
-  bottom: 18px;
-  font-size: 20px;
+.cardAction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid rgba(23, 21, 18, 0.18);
+  color: #3f3a33;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.cardAction span {
+  display: inline-block;
+  font-size: 16px;
+  line-height: 1;
 }
 
 .symbolSystem {
@@ -439,20 +453,6 @@
 .symbolTile p {
   font-size: 15px;
   font-weight: 500;
-}
-
-.productCard {
-  display: block;
-  transition: opacity 260ms ease;
-}
-
-.productCard:hover {
-  opacity: 0.78;
-}
-
-.productImage {
-  aspect-ratio: 235 / 192;
-  margin-bottom: 18px;
 }
 
 .journalGrid {
@@ -508,9 +508,11 @@
 .footer {
   position: relative;
   grid-template-columns: 240px 1fr 92px;
-  gap: 48px;
-  padding-top: 44px;
+  column-gap: 48px;
+  row-gap: 18px;
+  padding-top: 32px;
   padding-bottom: 0;
+  align-items: center;
 }
 
 .footerBrand {
@@ -538,7 +540,7 @@
 
 .footerColumns nav {
   display: flex;
-  min-height: 206px;
+  min-height: 166px;
   flex-direction: column;
   gap: 15px;
   padding-left: clamp(34px, 5vw, 58px);
@@ -563,9 +565,10 @@
 }
 
 .footerBird {
-  align-self: start;
-  width: 86px;
+  align-self: center;
+  width: 113px;
   height: auto;
+  transform: translateY(-8px);
   opacity: 0.75;
 }
 
@@ -575,7 +578,7 @@
   grid-template-columns: 1fr auto auto;
   gap: clamp(40px, 10vw, 156px);
   width: calc(100% + (var(--side) * 2));
-  margin: 34px calc(var(--side) * -1) 0;
+  margin: 0 calc(var(--side) * -1);
   padding: 23px var(--side);
   border-top: 1px solid var(--line);
   font-size: 13px;
@@ -642,10 +645,12 @@
     gap: 28px;
   }
 
+  .aboutBody {
+    padding-right: 0;
+  }
+
   .aboutBird {
-    right: var(--side);
-    top: auto;
-    bottom: 32px;
+    display: none;
   }
 
   .symbolGrid {
@@ -698,15 +703,7 @@
   }
 
   .collabCard {
-    min-height: 302px;
-  }
-
-  .journalCard {
-    grid-template-columns: 1fr;
-  }
-
-  .journalCard img {
-    aspect-ratio: 16 / 9;
+    min-height: 0;
   }
 
   .footerColumns {

@@ -185,13 +185,13 @@ export default function AequalisLanding({
         <SectionLabel>about aequalis</SectionLabel>
         <div className={styles.aboutBody}>
           <h2>
-            aequalis creates collections through shared design,
+            aequalis creates collections through shared design,{" "}
             <br />
             parallel values, and meaningful collaboration.
           </h2>
           <i aria-hidden="true" />
           <p>
-            이퀄리스는 장인, 브랜드, 유통사와 함께
+            이퀄리스는 장인, 브랜드, 유통사와 함께{" "}
             <br />
             기획하고 디자인하는 협업형 디자인 플랫폼입니다.
           </p>
@@ -227,8 +227,9 @@ export default function AequalisLanding({
                         <span key={line}>{line}</span>
                       ))}
                   </p>
-                  <span className={styles.cardArrow} aria-hidden="true">
-                    -&gt;
+                  <span className={styles.cardAction}>
+                    Detail view
+                    <span aria-hidden="true">→</span>
                   </span>
                 </div>
               </a>
@@ -268,12 +269,24 @@ export default function AequalisLanding({
         <div className={styles.productGrid}>
           {featuredProducts.length > 0 ? (
             featuredProducts.map((item) => (
-              <a className={styles.productCard} href={item.linkUrl} key={item.id}>
-                <div className={styles.productImage}>
-                  <Image src={item.imageUrl} alt="" width={235} height={192} />
+              <a className={styles.collabCard} href={item.linkUrl} key={item.id}>
+                <div className={styles.imageFrame}>
+                  <Image src={item.imageUrl} alt="" width={235} height={225} />
                 </div>
-                <h3>{item.title}</h3>
-                <p>{item.subtitle}</p>
+                <div className={styles.cardText}>
+                  <h3>{item.title}</h3>
+                  <p>
+                    {[item.subtitle, item.description || "foundation collection"]
+                      .filter(Boolean)
+                      .map((line) => (
+                        <span key={line}>{line}</span>
+                      ))}
+                  </p>
+                  <span className={styles.cardAction}>
+                    Detail view
+                    <span aria-hidden="true">→</span>
+                  </span>
+                </div>
               </a>
             ))
           ) : (
@@ -294,7 +307,7 @@ export default function AequalisLanding({
                   <i aria-hidden="true" />
                   <p>{post.summary}</p>
                   <span>
-                    read more <b aria-hidden="true">-&gt;</b>
+                    read more <b aria-hidden="true">→</b>
                   </span>
                 </div>
               </a>
@@ -350,7 +363,7 @@ export default function AequalisLanding({
         </div>
         <img
           className={styles.footerBird}
-          src="/images/aequalis/bird-small.png"
+          src="/images/aequalis/bird-small-foot.png"
           alt=""
           width={105}
           height={110}
