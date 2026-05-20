@@ -17,6 +17,7 @@ import { useAequalisContent } from "@/lib/useAequalisContent";
 import styles from "./page.module.css";
 
 type AdminMode = "products" | "journal";
+type UploadTarget = "product" | "journal";
 
 type ProductDraft = Omit<Product, "id" | "createdAt" | "updatedAt">;
 type JournalDraft = Omit<JournalPost, "id" | "createdAt" | "updatedAt">;
@@ -64,6 +65,9 @@ export default function AdminPage() {
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">(
     "idle",
   );
+  const [uploadStatus, setUploadStatus] = useState<
+    "idle" | "uploading" | "uploaded" | "error"
+  >("idle");
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
   const [editingJournalId, setEditingJournalId] = useState<string | null>(null);
   const [productDraft, setProductDraft] =
@@ -92,18 +96,29 @@ export default function AdminPage() {
     [content.products],
   );
 
-  function commit(nextContent: AequalisContent) {
-    writeStoredContent(nextContent);
+  function getAdminToken() {
     const storedToken = window.sessionStorage.getItem("aequalis-admin-token");
     const adminToken =
       storedToken ?? window.prompt("Enter the aequalis admin token");
+
+    if (!adminToken) {
+      return null;
+    }
+
+    window.sessionStorage.setItem("aequalis-admin-token", adminToken);
+
+    return adminToken;
+  }
+
+  function commit(nextContent: AequalisContent) {
+    writeStoredContent(nextContent);
+    const adminToken = getAdminToken();
 
     if (!adminToken) {
       setSaveStatus("error");
       return;
     }
 
-    window.sessionStorage.setItem("aequalis-admin-token", adminToken);
     setSaveStatus("saving");
 
     void fetch("/api/aequalis-content", {
@@ -128,6 +143,59 @@ export default function AdminPage() {
       .catch(() => {
         setSaveStatus("error");
       });
+  }
+
+  async function uploadImage(target: UploadTarget, file: File | null) {
+    if (!file) {
+      return;
+    }
+
+    const adminToken = getAdminToken();
+
+    if (!adminToken) {
+      setUploadStatus("error");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.set("file", file);
+    formData.set("folder", target === "product" ? "products" : "journals");
+    setSaveStatus("idle");
+    setUploadStatus("uploading");
+
+    try {
+      const response = await fetch("/api/aequalis-assets", {
+        method: "POST",
+        headers: {
+          "x-aequalis-admin-token": adminToken,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          window.sessionStorage.removeItem("aequalis-admin-token");
+        }
+
+        throw new Error("Upload failed");
+      }
+
+      const data = (await response.json()) as { publicUrl?: string };
+
+      if (!data.publicUrl) {
+        throw new Error("Upload URL missing");
+      }
+
+      if (target === "product") {
+        setProductDraft((draft) => ({ ...draft, imageUrl: data.publicUrl ?? "" }));
+      } else {
+        setJournalDraft((draft) => ({ ...draft, imageUrl: data.publicUrl ?? "" }));
+      }
+
+      setUploadStatus("uploaded");
+    } catch {
+      setUploadStatus("error");
+    }
   }
 
   function resetAll() {
@@ -285,7 +353,13 @@ export default function AdminPage() {
                 ? "Saved to Supabase"
                 : saveStatus === "error"
                   ? "Supabase save failed"
-                  : ""}
+                  : uploadStatus === "uploading"
+                    ? "Uploading image..."
+                    : uploadStatus === "uploaded"
+                      ? "Image uploaded"
+                      : uploadStatus === "error"
+                        ? "Image upload failed"
+                        : ""}
           </span>
           <a href="/aequalis">View landing</a>
           <button type="button" onClick={resetAll}>
@@ -439,9 +513,17 @@ export default function AdminPage() {
                   />
                 ) : null}
               </div>
-              <button type="button" disabled>
-                Upload after storage setup
-              </button>
+              <label className={styles.uploadButton}>
+                Upload image
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => {
+                    void uploadImage("product", event.target.files?.[0] ?? null);
+                    event.target.value = "";
+                  }}
+                />
+              </label>
             </div>
 
             <label>
@@ -644,9 +726,17 @@ export default function AdminPage() {
                   />
                 ) : null}
               </div>
-              <button type="button" disabled>
-                Upload after storage setup
-              </button>
+              <label className={styles.uploadButton}>
+                Upload image
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => {
+                    void uploadImage("journal", event.target.files?.[0] ?? null);
+                    event.target.value = "";
+                  }}
+                />
+              </label>
             </div>
 
             <label className={styles.checkRow}>

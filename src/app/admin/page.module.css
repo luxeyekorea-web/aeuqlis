@@ -60,7 +60,8 @@
 .tabs button,
 .actions button,
 .rowActions button,
-.imageTools button {
+.imageTools button,
+.uploadButton {
   min-height: 40px;
   padding: 0 15px;
   border: 1px solid #171512;
@@ -79,7 +80,8 @@
 .topbar button:hover,
 .tabs button:hover,
 .actions button:hover,
-.rowActions button:hover {
+.rowActions button:hover,
+.uploadButton:hover {
   background: transparent;
   color: #171512;
 }
@@ -218,6 +220,22 @@
   background: transparent;
   color: var(--muted);
   cursor: not-allowed;
+}
+
+.uploadButton {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  align-self: end;
+  white-space: nowrap;
+}
+
+.uploadButton input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .preview {
